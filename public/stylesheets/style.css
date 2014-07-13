@@ -1,0 +1,48 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #DBE3F0 !important;
+}
+
+h1 {
+  font-size: 36pt !important;
+  color: #003366 !important;
+}
+
+div.shuffle {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid darkgrey;
+  border-radius: 4px;  
+}
+
+div#hex_tx {
+  word-wrap: break-word;
+}
+
+div.truncated_output {
+  color: #003366;
+  text-decoration: none;
+}
+
+div.encrypted_output {
+  width: 500px;
+  margin-left: 30px;
+  word-wrap: break-word;
+  display: none;
+  color: black;
+  text-decoration: none;
+}
+
+div.shuffle_step_header {
+  text-decoration: underline;
+  color: #003366;  
+}
+
+table.part_decrypted_out_table {
+  display: none;
+}
+
+

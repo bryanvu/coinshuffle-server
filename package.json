@@ -1,0 +1,33 @@
+{
+  "name": "btcserver",
+  "version": "0.0.1",
+  "description": "",
+  "main": "test/server_test.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "socket.io": "~1.0.4",
+    "socket.io-client": "~1.0.4",
+    "mocha": "~1.20.1",
+    "async": "~0.9.0",
+    "bitcore": "^0.1.24",
+    "chai": "^1.9.1",
+    "express": "^4.4.4",
+    "body-parser": "^1.4.3",
+    "method-override": "^2.0.2",
+    "morgan": "^1.1.1",
+    "cookie-parser": "^1.3.1",
+    "path": "^0.4.9",
+    "debug": "^1.0.2",
+    "jade": "^1.3.1",
+    "serve-favicon": "^2.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha --reporter spec",
+    "start": "node ./bin/www"
+  },
+  "author": "",
+  "license": "ISC"
+}
