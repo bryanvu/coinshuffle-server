@@ -29,6 +29,10 @@ socket.on('update_completed_shuffles', function (completedShuffles) {
   })  
 })
 
+socket.on('transaction_creation_error', function (message) {
+  alert(message)
+})
+
 function renderShuffle (selector, shuffle, room) {
   selector.append("<div class='shuffle' id='" + shuffle.id + "'/>")
 

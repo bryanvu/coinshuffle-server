@@ -111,26 +111,38 @@ var start = function (io) {
           changeAddresses.push(peerInfo.changeAddress)
         })
 
-        Util.createTransaction(inputAddresses, changeAddresses, decryptedOutputs, denomination, function (transaction) {
-          io.to(roomName).emit('request_transaction_signature', {
-            'transaction': transaction,
-            'inputAddresses': inputAddresses,
-            'inputIndex': 0})
+        Util.createTransaction(inputAddresses, changeAddresses, decryptedOutputs, denomination, function (err, transaction) {
+          if (err) {
+            adminSocket.emit('transaction_creation_error', 'An error occurred while creating the shuffle transaction. Please pool and reset funds and try again.')
+            currentShuffles[roomName] = undefined
+            adminSocket.emit('update_current_shuffles', currentShuffles)
+            io.to(roomName).emit('shuffle_complete')
+          } else {
+            io.to(roomName).emit('request_transaction_signature', {
+              'transaction': transaction,
+              'inputAddresses': inputAddresses,
+              'inputIndex': 0})
 
-          var unsignedTx = TransactionBuilder.fromObj(JSON.parse(transaction)).build()
-          currentShuffles[roomName].unsignedTx = unsignedTx.getStandardizedObject()
+            var unsignedTx = TransactionBuilder.fromObj(JSON.parse(transaction)).build()
+            currentShuffles[roomName].unsignedTx = unsignedTx.getStandardizedObject()
+
+            var label = 'shuffle step ' + currentShuffles[roomName].partiallyDecryptedOutputsList.length
+
+            currentShuffles[roomName].strPartiallyDecryptedOutputsList[label] = strPartiallyDecryptedOutputs
+            adminSocket.emit('update_current_shuffles', currentShuffles)            
+          }
         })
       } else {
         strPartiallyDecryptedOutputs = partiallyDecryptedOutputs.map( function (output) {
           return output.toString('hex')
         })
         io.to(roomName).emit('decrypt_and_shuffle_outputs', partiallyDecryptedOutputs)
+
+        var label = 'shuffle step ' + currentShuffles[roomName].partiallyDecryptedOutputsList.length
+
+        currentShuffles[roomName].strPartiallyDecryptedOutputsList[label] = strPartiallyDecryptedOutputs
+        adminSocket.emit('update_current_shuffles', currentShuffles)        
       }
-
-      var label = 'shuffle step ' + currentShuffles[roomName].partiallyDecryptedOutputsList.length
-
-      currentShuffles[roomName].strPartiallyDecryptedOutputsList[label] = strPartiallyDecryptedOutputs
-      adminSocket.emit('update_current_shuffles', currentShuffles)
     })
 
     socket.on('transaction_input_signed', function (signatureResponse) {

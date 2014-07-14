@@ -122,11 +122,14 @@ var createTransaction = function(inputAddresses, changeAddresses, outputList, de
        spendUnconfirmed: config.spendUnconfirmed
       }
 
-      var builder = (new TransactionBuilder(opts))
-        .setUnspent(unspent)
-        .setOutputs(outs)
-
-      callback(JSON.stringify(builder.toObj()))
+      try {
+        var builder = (new TransactionBuilder(opts))
+          .setUnspent(unspent)
+          .setOutputs(outs)
+        callback(null, JSON.stringify(builder.toObj())) 
+      } catch (err) {
+        callback (err)
+      }
     })
   })
 }
